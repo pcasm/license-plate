@@ -3,7 +3,9 @@
     <div class="left-side">
       <h1>{{ title }}</h1>
       <h4>Ready to calculate a license plate for you! 🎉</h4>
-      <input type="number" placeholder="Enter a number here" required [(ngModel)] = this.inputNumber (ngModelChange)="resetFlags()">
+      <mat-form-field>
+        <input matInput type="number" placeholder="Enter a number here" required [(ngModel)] = inputNumber (ngModelChange)="resetFlags()">
+      </mat-form-field>
       <button mat-button [disabled]="inputNumber == undefined  || inputNumber < 0" (click)="getLicensePlate()">Get my plate!</button>
       @if (!error && outputLicensePlate) {
         <p><strong>{{'Your license plate is ' + outputLicensePlate}}</strong></p>

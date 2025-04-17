@@ -2,11 +2,11 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
-import { NgIf } from '@angular/common';
+import { MatFormField, MatInput } from '@angular/material/input';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, FormsModule, MatButton, NgIf],
+  imports: [RouterOutlet, FormsModule, MatButton, MatInput, MatFormField],
   templateUrl: './app.component.html',
   standalone: true,
   styleUrl: './app.component.scss'
