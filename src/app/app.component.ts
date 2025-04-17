@@ -26,50 +26,37 @@ import { MatFormField, MatInput } from '@angular/material/input';
     let letters = '';
 
     try {
-      for (let i = 0; i < input; i++) {
-        // space left for numbers before letters
-        const numberLength = this.plateTotalFigures - letters.length;
-        // max number vale for its current space left
-        const maxNumber = 10 ** numberLength - 1;
+      // Try to find the letter length needed for the inputNumber
+      for (let letterCount = 0; letterCount <= this.plateTotalFigures; letterCount++) {
+        const numberLength = this.plateTotalFigures - letterCount;
+        const maxNumbers = 10 ** numberLength;
+        const maxLetters = letterCount === 0 ? 1 : 26 ** letterCount;
+        const maxTotal = maxNumbers * maxLetters;
 
-        if (numbers < maxNumber) {
-          numbers++;
-        } else {
-          numbers = 0;
-          let success = false;
+        if (input < maxTotal) {
+          // For this combination of numbers and letters length, the inputNumber can be fit
+          let lettersIndex = Math.floor(input / maxNumbers);
+          numbers = input % maxNumbers;
 
-          if (letters === '') {
-            letters = 'A';
-            success = true;
-          } else {
-            let lettersArray = letters.split('');
-            // loop letters from right to left, skipping the Z's
-            for (let letterIndex = lettersArray.length - 1; letterIndex >= 0; letterIndex--) {
-              if (lettersArray[letterIndex] !== 'Z') {
-                // this one has not reached the Z yet, so increment it to the next letter in the alphabet
-                lettersArray[letterIndex] = this.alphabet[this.alphabet.indexOf(lettersArray[letterIndex]) + 1];
-                for (let nextLetterIndex = letterIndex + 1; nextLetterIndex < lettersArray.length; nextLetterIndex++) {
-                  // set all letters to the right hand to A's
-                  lettersArray[nextLetterIndex] = 'A';
-                }
-                letters = lettersArray.join('');
-                success = true;
-                break;
-              }
-            }
-
-            if (!success && letters.length < this.plateTotalFigures) {
-              // all letters are Z's but still one can be added
-              letters = 'A'.repeat(letters.length + 1);
-              success = true;
-            }
-
-            if (!success) throw new Error('Number is too big');
+          // Convert lettersIndex into an actual letters string
+          letters = '';
+          let remainingIndex = lettersIndex;
+          for (let i = 0; i < letterCount; i++) {
+            const letterCode = remainingIndex % 26;
+            letters = this.alphabet[letterCode] + letters;
+            remainingIndex = Math.floor(remainingIndex / 26);
           }
+
+          this.showResult(numbers, letters);
+          return;
+        } else {
+          // Subtract the numbers used for the current letter and loop again adding a new letter to the combination
+          input -= maxTotal;
         }
       }
 
-      this.showResult(numbers, letters);
+      throw new Error('Input number too large');
+
     } catch (error: any) {
       this.error = 'Error: ' + error.message;
     }
