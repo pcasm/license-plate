@@ -5,8 +5,11 @@
       <h4>Ready to calculate a license plate for you! 🎉</h4>
       <input type="number" placeholder="Enter a number here" required [(ngModel)] = this.inputNumber (ngModelChange)="resetFlags()">
       <button mat-button [disabled]="inputNumber == undefined  || inputNumber < 0" (click)="getLicensePlate()">Get my plate!</button>
-      <p *ngIf="!error && outputLicensePlate"><strong>{{outputLicensePlate ? 'Your license plate is ' + outputLicensePlate : ''}}</strong></p>
-      <p *ngIf="error" class="error">{{error}}</p>
+      @if (!error && outputLicensePlate) {
+        <p><strong>{{'Your license plate is ' + outputLicensePlate}}</strong></p>
+      } @else if (error) {
+        <p class="error">{{error}}</p>
+      }
     </div>
     <div class="divider" role="separator" aria-label="Divider"></div>
     <div class="right-side">
